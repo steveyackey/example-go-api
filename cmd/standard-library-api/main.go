@@ -46,7 +46,7 @@ func singleGuitarHandler(w http.ResponseWriter, r *http.Request) {
 func finishHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		err := json.NewEncoder(w).Encode(data.Finishs)
+		err := json.NewEncoder(w).Encode(data.Finishes)
 		if err != nil {
 			log.Printf("error handling colors... %+v \n", err)
 		}
@@ -57,11 +57,11 @@ func finishHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		data.Finishs = append(data.Finishs, c)
+		data.Finishes = append(data.Finishes, c)
 
 		// json.MarshallIndent returns a byte slice of pretty printed json
 		// Could also just use json.Marshall here
-		newColors, err := json.MarshalIndent(data.Finishs, "", "    ")
+		newColors, err := json.MarshalIndent(data.Finishes, "", "    ")
 		if err != nil {
 			http.Error(w, "Unable to unmarshall data", http.StatusInternalServerError)
 		}

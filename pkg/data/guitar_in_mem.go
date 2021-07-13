@@ -1,6 +1,6 @@
 package data
 
-var Finishs = []Finish{
+var Finishes = []Finish{
 	{"Sunburst"},
 	{"Natural"},
 	{"Red"},

@@ -45,11 +45,11 @@ func addFinishHandler(w http.ResponseWriter, r *http.Request, p httprouter.Param
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	data.Finishs = append(data.Finishs, c)
+	data.Finishes = append(data.Finishes, c)
 
 	// json.MarshallIndent returns a byte slice of pretty printed json
 	// Could also just use json.Marshall here
-	newColors, err := json.MarshalIndent(data.Finishs, "", "    ")
+	newColors, err := json.MarshalIndent(data.Finishes, "", "    ")
 	if err != nil {
 		http.Error(w, "Unable to unmarshall data", http.StatusInternalServerError)
 	}
@@ -59,7 +59,7 @@ func addFinishHandler(w http.ResponseWriter, r *http.Request, p httprouter.Param
 }
 
 func allFinishesHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	err := json.NewEncoder(w).Encode(data.Finishs)
+	err := json.NewEncoder(w).Encode(data.Finishes)
 	if err != nil {
 		log.Printf("error handling colors... %+v \n", err)
 	}
