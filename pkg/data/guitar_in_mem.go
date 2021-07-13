@@ -1,17 +1,12 @@
 package data
 
-var FinishColors = []FinishColor{
+var Finishs = []Finish{
 	{"Sunburst"},
 	{"Natural"},
 	{"Red"},
 }
 
-var Guitars = map[string]string{
-	"Gibson": "Les Paul",
-	"Fender": "Telecaster",
-}
-
-var Amps = map[string]string{
-	"Fender": "Deluxe",
-	"Vox":    "AC30",
+var Guitars = map[string]Guitar{
+	"Gibson": {Brand: "Gibson", Model: "Les Paul", Finish: Finish{Color: "Sunburst"}},
+	"Fender": {Brand: "Fender", Model: "Stratocaster", Finish: Finish{Color: "Sunburst"}},
 }

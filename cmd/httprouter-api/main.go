@@ -38,18 +38,18 @@ func singleGuitarHandler(w http.ResponseWriter, r *http.Request, p httprouter.Pa
 	}
 }
 
-func addFinishColor(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	var c data.FinishColor
+func addFinish(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var c data.Finish
 	err := json.NewDecoder(r.Body).Decode(&c)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	data.FinishColors = append(data.FinishColors, c)
+	data.Finishs = append(data.Finishs, c)
 
 	// json.MarshallIndent returns a byte slice of pretty printed json
 	// Could also just use json.Marshall here
-	newColors, err := json.MarshalIndent(data.FinishColors, "", "    ")
+	newColors, err := json.MarshalIndent(data.Finishs, "", "    ")
 	if err != nil {
 		http.Error(w, "Unable to unmarshall data", http.StatusInternalServerError)
 	}
@@ -58,8 +58,8 @@ func addFinishColor(w http.ResponseWriter, r *http.Request, p httprouter.Params)
 	log.Printf("Added %+v", c)
 }
 
-func allFinishColors(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	err := json.NewEncoder(w).Encode(data.FinishColors)
+func allFinishs(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	err := json.NewEncoder(w).Encode(data.Finishs)
 	if err != nil {
 		log.Printf("error handling colors... %+v \n", err)
 	}
@@ -86,8 +86,8 @@ func main() {
 
 	router.GET("/guitars", loggingMiddleware(allGuitarsHandler))
 	router.GET("/guitars/:brand", loggingMiddleware(singleGuitarHandler))
-	router.GET("/finish", loggingMiddleware(allFinishColors))
-	router.POST("/finish", loggingMiddleware(addFinishColor))
+	router.GET("/finish", loggingMiddleware(allFinishs))
+	router.POST("/finish", loggingMiddleware(addFinish))
 
 	log.Fatal(http.ListenAndServe(":8888", router))
 }
