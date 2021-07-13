@@ -38,7 +38,7 @@ func singleGuitarHandler(w http.ResponseWriter, r *http.Request, p httprouter.Pa
 	}
 }
 
-func addFinish(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func addFinishHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	var c data.Finish
 	err := json.NewDecoder(r.Body).Decode(&c)
 	if err != nil {
@@ -58,7 +58,7 @@ func addFinish(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	log.Printf("Added %+v", c)
 }
 
-func allFinishs(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func allFinishesHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	err := json.NewEncoder(w).Encode(data.Finishs)
 	if err != nil {
 		log.Printf("error handling colors... %+v \n", err)
@@ -86,8 +86,8 @@ func main() {
 
 	router.GET("/guitars", loggingMiddleware(allGuitarsHandler))
 	router.GET("/guitars/:brand", loggingMiddleware(singleGuitarHandler))
-	router.GET("/finish", loggingMiddleware(allFinishs))
-	router.POST("/finish", loggingMiddleware(addFinish))
+	router.GET("/finish", loggingMiddleware(allFinishesHandler))
+	router.POST("/finish", loggingMiddleware(addFinishHandler))
 
 	log.Fatal(http.ListenAndServe(":8888", router))
 }

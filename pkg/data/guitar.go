@@ -2,8 +2,8 @@ package data
 
 // Guitar struct used for marshalling/unmarshalling json key/value pairs
 type Guitar struct {
-	Brand string
-	Model string
+	Brand string `json:"brand"` // this attribute is not required, lets Go know to rename the field "brand", as exported (public) fields requires uppercase
+	Model string `json:"model"`
 
 	// In Go, you can embed types and then have access to Guitar.Color or Guitar.Finish.Color
 	// It also means a guitar gets any method a finish would have

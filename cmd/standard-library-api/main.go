@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"runtime/debug"
 	"strings"
 
 	"github.com/steveyackey/example-go-api/pkg/data"
@@ -81,6 +82,21 @@ func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	})
 }
 
+// recoverPanic handles any panics that may happen and gracefully recovers, logging the error
+func recoverPanic(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				w.Header().Set("Connection", "close")
+				log.Printf("%s\n%s", err, debug.Stack())
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
+		}()
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 
 	log.Println(basicPaths)
@@ -92,9 +108,9 @@ func main() {
 		fmt.Fprintln(w, basicPaths)
 	})
 
-	mux.HandleFunc("/guitars", loggingMiddleware(allGuitarsHandler))
-	mux.HandleFunc("/guitars/", loggingMiddleware(singleGuitarHandler))
-	mux.HandleFunc("/finish", loggingMiddleware(finishHandler))
+	mux.HandleFunc("/guitars", recoverPanic(loggingMiddleware(allGuitarsHandler)))
+	mux.HandleFunc("/guitars/", recoverPanic(loggingMiddleware(singleGuitarHandler)))
+	mux.HandleFunc("/finish", recoverPanic(loggingMiddleware(finishHandler)))
 
 	log.Fatal(http.ListenAndServe(":8888", mux))
 }
