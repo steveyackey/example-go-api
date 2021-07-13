@@ -68,6 +68,7 @@ func finishHandler(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Fprintln(w, string(newColors))
 		log.Printf("Added %+v", c)
+		r.Body.Close()
 	default:
 		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
 	}
